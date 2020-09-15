@@ -6,6 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Eloquent implements Authenticatable
 {
@@ -25,4 +26,12 @@ class User extends Eloquent implements Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function tasks()
+    {
+        $user = Auth::user();
+        $user_id = $user->id;
+        $tasks = Task::where('user_id', "$user_id")->get();
+        return $tasks;
+    }
 }
